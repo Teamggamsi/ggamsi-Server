@@ -21,7 +21,7 @@ class LoginQueryParam:
 
 
 @router.post("/login")
-async def login(params: LoginQueryParam = Depends()):
+async def 로그인(params: LoginQueryParam = Depends()):
     connection, cursor = await Connect()
     cursor.execute("select * from users where email = %s", (params.email))
     row = cursor.fetchone()
@@ -50,7 +50,7 @@ async def login(params: LoginQueryParam = Depends()):
 
 
 @router.get("/token")
-async def tokens(request: Request):
+async def 토큰으로_유저정보_불러오기(request: Request):
     authorization = request.headers.get('Authorization')
     tokenData = await validateToken(authorization)
     if tokenData:
@@ -85,7 +85,7 @@ class RequestData:
 
 
 @router.post("/register")
-async def register(data: RequestData = Depends()):
+async def 회원기입(data: RequestData = Depends()):
     connection, cursor = await Connect()
     cursor.execute("select * from users where email = %s", (data.email))
     row = cursor.fetchone()

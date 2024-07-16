@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 
 app = FastAPI(
-    title="App",
+    title="못난이",
 )
 
 origins = [
