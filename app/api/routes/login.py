@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Query, Depends
 
 from app.core.security import createToken, validateToken
 from pydantic import BaseModel
@@ -9,22 +9,28 @@ import bcrypt
 
 router = APIRouter()
 
-class LoginData(BaseModel):
-    email:str
-    password:str
+
+class LoginQueryParam:
+    def __init__(
+        self,
+        email: str = Query(..., description="이메일"),
+        password: str = Query(..., description="비밀번호"),
+    ):
+        self.email = email
+        self.password = password
+
 
 @router.post("/login")
-async def login(data: LoginData):
-    requestData = dict(data)
+async def login(params: LoginQueryParam = Depends()):
     connection, cursor = await Connect()
-    cursor.execute("select * from users where email = %s", (requestData["email"]))
+    cursor.execute("select * from users where email = %s", (params.email))
     row = cursor.fetchone()
     try:
         if not row is None:
-            if bcrypt.checkpw(requestData["password"].encode('utf-8'), row[2].encode('utf-8')):
+            if bcrypt.checkpw(params.password.encode('utf-8'), row[2].encode('utf-8')):
                 return {
                     "success": True,
-                    "token": await createToken(requestData["email"])
+                    "token": await createToken(params.email)
                 }
             else:
                 return {
@@ -41,10 +47,6 @@ async def login(data: LoginData):
             "success": False,
             "message": "서버에서 오류가 발생하였습니다."
         }
-
-
-class TokenData(BaseModel):
-    token: str
 
 
 @router.get("/token")
@@ -68,26 +70,33 @@ async def tokens(request: Request):
             "userName": None,
         }
 
-class RequestData(BaseModel):
-    email: str
-    password: str
-    passwordConfirm: str
-    nickname: str
+class RequestData:
+    def __init__(
+        self,
+        email: str = Query(..., description="이메일"),
+        password: str = Query(..., description="비밀번호"),
+        passwordConfirm: str = Query(..., description="비밀번호 확인"),
+        nickname: str = Query(..., description="닉네임"),
+    ):
+        self.email = email
+        self.password = password
+        self.passwordConfirm = passwordConfirm
+        self.nickname = nickname
+
 
 @router.post("/register")
-async def register(data: RequestData):
-    requestData = dict(data)
+async def register(data: RequestData = Depends()):
     connection, cursor = await Connect()
-    cursor.execute("select * from users where email = %s", (requestData["email"]))
+    cursor.execute("select * from users where email = %s", (data.email))
     row = cursor.fetchone()
     if row is None:
-        if not requestData["password"] == requestData["passwordConfirm"]:
+        if not data.password == data.passwordConfirm:
             return {
                 "result": False,
                 "message": "비밀번호 확인과 비밀번호가 일치하지 않습니다."
             }
 
-        cursor.execute("select * from users where nickname = %s", (requestData["nickname"]))
+        cursor.execute("select * from users where nickname = %s", (data.nickname))
         row = cursor.fetchone()
 
         if not row is None:
@@ -95,9 +104,9 @@ async def register(data: RequestData):
                 "result": False,
                 "message": "이미 해당 닉네임이 존재합니다."
             }
-        password = requestData["password"].encode("utf-8")
+        password = data.password.encode("utf-8")
         hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode("utf-8")
-        cursor.execute("INSERT INTO users(email, password, nickname) VALUES(%s, %s, %s);", (requestData["email"], hashed, requestData["nickname"]))
+        cursor.execute("INSERT INTO users(email, password, nickname) VALUES(%s, %s, %s);", (data.email, hashed, data.nickname))
         connection.commit()
         connection.close()
         return {
