@@ -4,4 +4,4 @@ pyjwt
 pymysql
 pydantic
 bcrypt
-PIL
+Pillow
