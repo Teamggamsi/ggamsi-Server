@@ -10,27 +10,23 @@ import bcrypt
 router = APIRouter()
 
 
-class LoginQueryParam:
-    def __init__(
-        self,
-        email: str = Query(..., description="이메일"),
-        password: str = Query(..., description="비밀번호"),
-    ):
-        self.email = email
-        self.password = password
+class LoginQueryParam(BaseModel):
+    email: str
+    password: str
 
 
 @router.post("/login")
-async def 로그인(params: LoginQueryParam = Depends()):
+async def 로그인(LoginQueryParam: LoginQueryParam):
+    data = dict(LoginQueryParam)
     connection, cursor = await Connect()
-    cursor.execute("select * from users where email = %s", (params.email))
+    cursor.execute("select * from users where email = %s", (data["email"]))
     row = cursor.fetchone()
     try:
         if not row is None:
-            if bcrypt.checkpw(params.password.encode('utf-8'), row[2].encode('utf-8')):
+            if bcrypt.checkpw(data["password"].encode('utf-8'), row[2].encode('utf-8')):
                 return {
                     "success": True,
-                    "token": await createToken(params.email)
+                    "token": await createToken(data["email"])
                 }
             else:
                 return {
