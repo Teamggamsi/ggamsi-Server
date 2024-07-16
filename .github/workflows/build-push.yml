@@ -1,7 +1,7 @@
 name: Fast API docker build push
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-latest
