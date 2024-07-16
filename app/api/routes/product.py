@@ -46,7 +46,7 @@ class getParam(BaseModel):
 
 
 @router.get("/products")
-async def 상품_목록_불러오기(params: getParam  = Depends()):
+async def 상품_목록_불러오기(params: getParam):
     data = dict(params)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
@@ -81,7 +81,7 @@ async def 상품_목록_불러오기(params: getParam  = Depends()):
     
 
 @router.get("/products/{category}")
-async def 카테고리로_글_가져오기(category:str, params: getParam  = Depends()):
+async def 카테고리로_글_가져오기(category:str, params: getParam):
     data = dict(params)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
@@ -118,7 +118,7 @@ class getDetailParam(BaseModel):
     token: str
 
 @router.get("/product/{id}")
-async def 상품_아이디로_목록_불러오기(id: str, params: getDetailParam  = Depends()):
+async def 상품_아이디로_목록_불러오기(id: str, params: getDetailParam):
     data = dict(params)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):

@@ -26,7 +26,7 @@ async def 로그인(LoginQueryParam: LoginQueryParam):
             if bcrypt.checkpw(data["password"].encode('utf-8'), row[2].encode('utf-8')):
                 return {
                     "success": True,
-                    "token": await createToken(data["email"])
+                    "token": await createToken(row[3])
                 }
             else:
                 return {
@@ -66,33 +66,27 @@ async def 토큰으로_유저정보_불러오기(request: Request):
             "userName": None,
         }
 
-class RequestData:
-    def __init__(
-        self,
-        email: str = Query(..., description="이메일"),
-        password: str = Query(..., description="비밀번호"),
-        passwordConfirm: str = Query(..., description="비밀번호 확인"),
-        nickname: str = Query(..., description="닉네임"),
-    ):
-        self.email = email
-        self.password = password
-        self.passwordConfirm = passwordConfirm
-        self.nickname = nickname
+class RequestData(BaseModel):
+    email: str
+    password: str
+    passwordConfirm: str
+    nickname: str
 
 
 @router.post("/register")
 async def 회원기입(data: RequestData = Depends()):
     connection, cursor = await Connect()
-    cursor.execute("select * from users where email = %s", (data.email))
+    requestData = dict(data)
+    cursor.execute("select * from users where email = %s", (requestData["email"]))
     row = cursor.fetchone()
     if row is None:
-        if not data.password == data.passwordConfirm:
+        if not requestData["password"] == requestData["passwordConfirm"]:
             return {
                 "result": False,
                 "message": "비밀번호 확인과 비밀번호가 일치하지 않습니다."
             }
 
-        cursor.execute("select * from users where nickname = %s", (data.nickname))
+        cursor.execute("select * from users where nickname = %s", (requestData["nickname"]))
         row = cursor.fetchone()
 
         if not row is None:
@@ -100,13 +94,14 @@ async def 회원기입(data: RequestData = Depends()):
                 "result": False,
                 "message": "이미 해당 닉네임이 존재합니다."
             }
-        password = data.password.encode("utf-8")
+        password = requestData["password"].encode("utf-8")
         hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode("utf-8")
-        cursor.execute("INSERT INTO users(email, password, nickname) VALUES(%s, %s, %s);", (data.email, hashed, data.nickname))
+        cursor.execute("INSERT INTO users(email, password, nickname) VALUES(%s, %s, %s);", (requestData["email"], hashed, requestData["nickname"]))
         connection.commit()
         connection.close()
         return {
-            "result": True
+            "result": True,
+            "token": await createToken(requestData["nickname"])
         }
     else:
         connection.close()

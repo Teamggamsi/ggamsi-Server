@@ -15,7 +15,7 @@ class postProductParam(BaseModel):
 
 
 @router.put("/add")
-async def 좋아요_추가히기(params: postProductParam = Depends()):
+async def 좋아요_추가히기(params: postProductParam):
     data = dict(params)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
@@ -37,7 +37,7 @@ async def 좋아요_추가히기(params: postProductParam = Depends()):
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="토큰이 유호하지 않습니다.")
 
 @router.delete("/delete")
-async def 좋아요_삭제하기(params: postProductParam = Depends()):
+async def 좋아요_삭제하기(params: postProductParam):
     data = dict(params)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
