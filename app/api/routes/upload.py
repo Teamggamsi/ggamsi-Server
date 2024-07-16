@@ -2,8 +2,7 @@ from fastapi import APIRouter, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-import urllib, secrets, io
-from boto3 import client
+import secrets
 
 from PIL import Image, ImageOps
 from pathlib import Path

@@ -4,7 +4,4 @@ pyjwt
 pymysql
 pydantic
 bcrypt
-boto3
-urllib
-cryptography
-pillow
+
