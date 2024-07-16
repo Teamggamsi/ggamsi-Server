@@ -69,7 +69,6 @@ async def 토큰으로_유저정보_불러오기(request: Request):
 class RequestData(BaseModel):
     email: str
     password: str
-    passwordConfirm: str
     nickname: str
 
 
@@ -80,12 +79,7 @@ async def 회원기입(data: RequestData):
     cursor.execute("select * from users where email = %s", (requestData["email"]))
     row = cursor.fetchone()
     if row is None:
-        if not requestData["password"] == requestData["passwordConfirm"]:
-            return {
-                "result": False,
-                "message": "비밀번호 확인과 비밀번호가 일치하지 않습니다."
-            }
-
+    
         cursor.execute("select * from users where nickname = %s", (requestData["nickname"]))
         row = cursor.fetchone()
 
