@@ -74,7 +74,7 @@ class RequestData(BaseModel):
 
 
 @router.post("/register")
-async def 회원기입(data: RequestData = Depends()):
+async def 회원기입(data: RequestData):
     connection, cursor = await Connect()
     requestData = dict(data)
     cursor.execute("select * from users where email = %s", (requestData["email"]))
