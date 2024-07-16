@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from core.security import createToken, validateToken
+from app.core.security import createToken, validateToken
 from pydantic import BaseModel
 
-from core.database import Connect
+from app.core.database import Connect
 
 import bcrypt
 
