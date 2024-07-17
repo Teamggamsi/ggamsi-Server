@@ -24,12 +24,12 @@ jobs:
         with:
           host: ${{ secrets.LINUX_HOST }}
           username: ${{ secrets.LINUX_USERNAME }}
-          key: ${{ secrets.LINUX_SSH_KEY }}
+          password: ${{ secrets.LINUX_PASSWORD }}
           port: ${{ secrets.LINUX_SSH_PORT }}
           script: |
-            docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_LOGIN }}
-            docker stop ggamsi
-            docker rm ggamsi
-            docker rmi ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
-            docker pull ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
-            docker run -d -p 8080:8080 --name ggamsi ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
+            sudo docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_LOGIN }}
+            sudo docker stop ggamsi
+            sudo docker rm ggamsi
+            sudo docker rmi ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
+            sudo docker pull ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
+            sudo docker run -d -p 8080:8080 --name ggamsi ${{ secrets.DOCKER_LOGIN }}/ggamsi:latest
