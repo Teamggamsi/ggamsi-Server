@@ -69,7 +69,7 @@ async def 상품_목록_불러오기():
     productData = {}
     for i in rows:
         productData[i[0]] = {
-             "id": i[0],
+            "id": i[0],
             "title": i[1],
             "content": i[2],
             "delivery": i[3],

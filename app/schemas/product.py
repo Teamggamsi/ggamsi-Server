@@ -16,4 +16,4 @@ class postProductFromId(BaseModel):
     id: int
 
 class postProductSearch(BaseModel):
-    search: str    
+    search: str   
