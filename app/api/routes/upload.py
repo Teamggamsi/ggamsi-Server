@@ -31,7 +31,7 @@ def save_image_to_filesystem(image: Image, file_path: str):
     image.save(file_path, "jpeg", quality=70)
     return file_path
 
-@router.post("/upload")
+@router.post("/upload") 
 async def 이미지_업로드(file: UploadFile = File(...)):
     image = resize_image(file)
     tokens = secrets.token_hex(12)
