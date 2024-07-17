@@ -14,8 +14,9 @@ from app.schemas.product import *
 router = APIRouter()
 
 @router.post("/post")
-async def 상품_글_작성하기(params: postProductParam):
-    data = dict(params)
+async def 상품_글_작성하기(request: Request):
+    data = await request.json()
+    print(data)
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
         try:
