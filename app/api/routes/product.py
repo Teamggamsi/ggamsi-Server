@@ -35,6 +35,30 @@ async def 상품_글_작성하기(params: postProductParam):
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="토큰이 유호하지 않습니다.")
 
+@router.post("/search")
+async def 상품_검색하기(paprms: postProductSearch):
+    data = dict(paprms)
+    connection, cursor = await Connect()
+    cursor.execute("SELECT * FROM products;")
+    rows = cursor.fetchall()
+    productData = {}
+    for i in rows:
+        if (data["search"] in i[1]):
+            productData[i[0]] = {
+                "id": i[0],
+                "title": i[1],
+                "content": i[2],
+                "delivery": i[3],
+                "price": i[4],
+                "category": i[5],
+                "image": i[6],
+                "author": i[7]
+            }
+    connection.close()
+    return {
+        "success": True,
+        "data": productData
+    }
 
 @router.post("/products")
 async def 상품_목록_불러오기():

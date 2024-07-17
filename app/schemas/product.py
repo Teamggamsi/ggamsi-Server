@@ -14,3 +14,6 @@ class postProductFromCategory(BaseModel):
 
 class postProductFromId(BaseModel):
     id: int
+
+class postProductSearch(BaseModel):
+    search: str    
