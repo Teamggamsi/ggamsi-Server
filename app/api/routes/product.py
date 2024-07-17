@@ -42,13 +42,14 @@ async def 상품_목록_불러오기():
     productData = {}
     for i in rows:
         productData[i[0]] = {
-            "id": i[0],
+             "id": i[0],
             "title": i[1],
             "content": i[2],
-            "price": i[3],
-            "category": i[4],
-            "image": i[5],
-            "author": i[6],
+            "delivery": i[3],
+            "price": i[4],
+            "category": i[5],
+            "image": i[6],
+            "author": i[7]
         }
     connection.close()
     return {
@@ -68,10 +69,11 @@ async def 카테고리로_글_가져오기(params: postProductFromCategory):
             "id": i[0],
             "title": i[1],
             "content": i[2],
-            "price": i[3],
-            "category": i[4],
-            "image": i[5],
-            "author": i[6],
+            "delivery": i[3],
+            "price": i[4],
+            "category": i[5],
+            "image": i[6],
+            "author": i[7]
         })
     connection.close()
     return {
@@ -92,9 +94,10 @@ async def 상품_아이디로_목록_불러오기(params: postProductFromId):
             "id": rows[0],
             "title": rows[1],
             "content": rows[2],
-            "price": rows[3],
-            "category": rows[4],
-            "image": rows[5],
-            "author": rows[6],
+            "delivery": rows[3],
+            "price": rows[4],
+            "category": rows[5],
+            "image": rows[6],
+            "author": rows[7],
         }
     }
