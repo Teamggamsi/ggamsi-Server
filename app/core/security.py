@@ -4,7 +4,6 @@ import jwt
 
 SECRET_KEY = 'l9s)qu^u4=ofc16+9ap*q!i@yf))8np^7sw*4mts(dji(72)o('
 
-
 async def createToken(user):
     payload = {
         'user': user,

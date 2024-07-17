@@ -7,17 +7,9 @@ from pydantic import BaseModel
 
 from app.core.database import Connect
 
+from app.schemas.product import *
+
 router = APIRouter()
-
-
-class postProductParam(BaseModel):
-    token: str
-    title: str
-    price:int
-    content: str
-    img: str
-    category: str
-
 
 @router.post("/post")
 async def 상품_글_작성하기(params: postProductParam):
@@ -41,11 +33,8 @@ async def 상품_글_작성하기(params: postProductParam):
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="토큰이 유호하지 않습니다.")
 
-class getParam(BaseModel):
-    token: str
 
-
-@router.get("/products")
+@router.post("/products")
 async def 상품_목록_불러오기(params: getParam):
     data = dict(params)
     token = await validateToken(data["token"])
@@ -80,7 +69,7 @@ async def 상품_목록_불러오기(params: getParam):
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="토큰이 유호하지 않습니다.")
     
 
-@router.get("/products/{category}")
+@router.post("/products/{category}")
 async def 카테고리로_글_가져오기(category:str, params: getParam):
     data = dict(params)
     token = await validateToken(data["token"])
@@ -114,10 +103,7 @@ async def 카테고리로_글_가져오기(category:str, params: getParam):
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="토큰이 유호하지 않습니다.")    
 
-class getDetailParam(BaseModel):
-    token: str
-
-@router.get("/product/{id}")
+@router.post("/product/{id}")
 async def 상품_아이디로_목록_불러오기(id: str, params: getDetailParam):
     data = dict(params)
     token = await validateToken(data["token"])

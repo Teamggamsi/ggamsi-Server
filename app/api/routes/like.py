@@ -6,13 +6,9 @@ from pydantic import BaseModel
 
 from app.core.database import Connect
 
+from app.schemas.like import *
+
 router = APIRouter()
-
-
-class postProductParam(BaseModel):
-    token: str
-    id: int
-
 
 @router.put("/add")
 async def 좋아요_추가히기(params: postProductParam):

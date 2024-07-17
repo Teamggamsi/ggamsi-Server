@@ -7,13 +7,9 @@ from app.core.database import Connect
 
 import bcrypt
 
+from app.schemas.users import *
+
 router = APIRouter()
-
-
-class LoginQueryParam(BaseModel):
-    email: str
-    password: str
-
 
 @router.post("/login")
 async def 로그인(LoginQueryParam: LoginQueryParam):
@@ -44,7 +40,6 @@ async def 로그인(LoginQueryParam: LoginQueryParam):
             "message": "서버에서 오류가 발생하였습니다."
         }
 
-
 @router.get("/token")
 async def 토큰으로_유저정보_불러오기(request: Request):
     authorization = request.headers.get('Authorization')
@@ -65,12 +60,6 @@ async def 토큰으로_유저정보_불러오기(request: Request):
             "user": None,
             "userName": None,
         }
-
-class RequestData(BaseModel):
-    email: str
-    password: str
-    nickname: str
-
 
 @router.post("/register")
 async def 회원기입(data: RequestData):
