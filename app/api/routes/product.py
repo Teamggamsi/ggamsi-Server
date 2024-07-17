@@ -42,19 +42,18 @@ async def 상품_검색하기(paprms: postProductSearch):
     connection, cursor = await Connect()
     cursor.execute("SELECT * FROM products;")
     rows = cursor.fetchall()
-    productData = {}
-    for i in rows:
-        if (data["search"] in i[1]):
-            productData[i[0]] = {
-                "id": i[0],
-                "title": i[1],
-                "content": i[2],
-                "delivery": i[3],
-                "price": i[4],
-                "category": i[5],
-                "image": i[6],
-                "author": i[7]
-            }
+    productData = []
+    for i in rows :
+        productData.append({
+            "id": i[0],
+            "title": i[1],
+            "content": i[2],
+            "delivery": i[3],
+            "price": i[4],
+            "category": i[5],
+            "image": i[6],
+            "author": i[7]
+        })
             
     connection.close()
     return {
