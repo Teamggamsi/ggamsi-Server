@@ -24,7 +24,7 @@ jobs:
         with:
           host: ${{ secrets.LINUX_HOST }}
           username: ${{ secrets.LINUX_USERNAME }}
-          password: ${{ secrets.LINUX_SSH_KEY }}
+          key: ${{ secrets.LINUX_SSH_KEY }}
           port: ${{ secrets.LINUX_SSH_PORT }}
           script: |
             docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_LOGIN }}
