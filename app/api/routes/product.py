@@ -20,7 +20,7 @@ async def 상품_글_작성하기(request: Request):
     token = await validateToken(data["token"])
     if (len(data["token"]) > 0 and token):
         try:
-            if (not data["title"] == "" and not data["content"] == "" and not data["tag"] == ""):
+            if (not data["title"] == "" and not data["content"] == "" and not data["category"] == ""):
                 connection, cursor = await Connect()
                 cursor.execute("INSERT INTO products(title, content, delivery, price, tag, image, author) VALUES(%s, %s, %s, %s, %s, %s, %s);", (data["title"], data["content"], data["delivery"], data["price"], data["category"], data["img"], token))
                 connection.commit()
