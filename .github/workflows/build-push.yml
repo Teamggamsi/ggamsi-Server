@@ -8,13 +8,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the FastAPI Docker image
-      run: docker build -t '${{secrets.DOCKER_LOGIN}}'/ggamsi:latest' .
+      run: docker build -t '${{secrets.DOCKER_LOGIN}}/ggamsi:latest .
       
     - name: Login to docker
-      run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
+      run: docker login --username ${{secrets.DOCKER_LOGIN}} --password ${{secrets.DOCKER_PASSWORD}}
 
     - name: Push the docker image
-      run: docker push '${{secrets.DOCKER_LOGIN}}'/ggamsi:latest'
+      run: docker push '${{secrets.DOCKER_LOGIN}}/ggamsi:latest
   deploy:
     needs: build
     runs-on: ubuntu-latest
