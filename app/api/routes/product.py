@@ -54,6 +54,7 @@ async def 상품_검색하기(paprms: postProductSearch):
                 "image": i[6],
                 "author": i[7]
             }
+            
     connection.close()
     return {
         "success": True,

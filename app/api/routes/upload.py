@@ -36,7 +36,7 @@ async def 이미지_업로드(file: UploadFile = File(...)):
     image = resize_image(file)
     tokens = secrets.token_hex(12)
     image = save_image_to_filesystem(image, f"{UPLOAD_DIR}/{tokens}.jpeg")        
-    return {"file": f"{tokens}"}
+    return {"url": f"http://43.201.116.75:8080/api/cdn/images/{tokens}"}
 
 @router.get("/images/{filename}")
 async def 이미지_불러오기(filename: str):
