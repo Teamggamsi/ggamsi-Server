@@ -78,9 +78,9 @@ async def 카테고리로_글_가져오기(category:str, params: getParam):
             connection, cursor = await Connect()
             cursor.execute("SELECT * FROM products WHERE tag = %s;",(category))
             rows = cursor.fetchall()
-            productData = {}
+            productData = []
             for i in rows:
-                productData[i[0]] = {
+                productData.append({
                     "id": i[0],
                     "title": i[1],
                     "content": i[2],
@@ -88,7 +88,7 @@ async def 카테고리로_글_가져오기(category:str, params: getParam):
                     "category": i[4],
                     "image": i[5],
                     "author": i[6],
-                }
+                })
             connection.close()
             return {
                 "success": True,
