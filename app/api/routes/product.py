@@ -56,10 +56,11 @@ async def 상품_목록_불러오기():
         "data": productData
     }
 
-@router.post("/products/{category}")
-async def 카테고리로_글_가져오기(category:str):
+@router.post("/products/category")
+async def 카테고리로_글_가져오기(params: postProductFromCategory):
+    data = dict(params)
     connection, cursor = await Connect()
-    cursor.execute("SELECT * FROM products WHERE tag = %s;",(category))
+    cursor.execute("SELECT * FROM products WHERE tag = %s;",(data["category"]))
     rows = cursor.fetchall()
     productData = []
     for i in rows:
@@ -78,10 +79,11 @@ async def 카테고리로_글_가져오기(category:str):
         "data": productData
     }
 
-@router.post("/product/{id}")
-async def 상품_아이디로_목록_불러오기(id: str):
+@router.post("/product/id")
+async def 상품_아이디로_목록_불러오기(params: postProductFromId):
+    data = dict(params)
     connection, cursor = await Connect()
-    cursor.execute("SELECT * FROM products WHERE id = %s;", (id))
+    cursor.execute("SELECT * FROM products WHERE id = %s;", (data["id"]))
     rows = cursor.fetchone()
     connection.close()
     return {

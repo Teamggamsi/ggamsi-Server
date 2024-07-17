@@ -8,3 +8,9 @@ class postProductParam(BaseModel):
     content: str
     img: str
     category: str
+
+class postProductFromCategory(BaseModel):
+    category: str
+
+class postProductFromId(BaseModel):
+    id: int
