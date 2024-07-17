@@ -5,6 +5,8 @@ from typing import Optional
 from app.core.security import createToken, validateToken
 from pydantic import BaseModel
 
+import random
+
 from app.core.database import Connect
 
 from app.schemas.product import *
@@ -79,6 +81,30 @@ async def 카테고리로_글_가져오기(params: postProductFromCategory):
     return {
         "success": True,
         "data": productData
+    }
+
+@router.post("/products/popular")
+async def 인기상품_가져오기():
+    connection, cursor = await Connect()
+    cursor.execute("SELECT * FROM products")
+    rows = cursor.fetchall()
+    productData = []
+    for i in rows :
+        productData.append({
+            "id": i[0],
+            "title": i[1],
+            "content": i[2],
+            "delivery": i[3],
+            "price": i[4],
+            "category": i[5],
+            "image": i[6],
+            "author": i[7]
+        })
+    random.shuffle(productData)
+    connection.close()
+    return {
+        "success": True,
+        "data": productData[:10]
     }
 
 @router.post("/product/id")
